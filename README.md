@@ -17,7 +17,7 @@ When you want to implement the third solution you can use **Observer pattern**.
   3. A public method by which the observers can unsubscribe from the event (public void Unsubscribe(Observer observer))
   4. A private method for the observable to notify the subscribers about the state change (private void NotifySubscribers())
 * Observer - e.g. you
-  1. A public method by which the observable/publisher/subject updates the observer about the state change (Update(Observable observable)). This call is in the Notify method of the observable.
+  1. A public method by which the observable/publisher/subject updates the observer about the state change (public void Update(Observable observable)). This call is in the Notify method of the observable.
 
 ## Example implementation
 If mentioned the newspaper example I will implement it.
