@@ -23,47 +23,47 @@ When you want to implement the third solution you can use **Observer pattern**.
 If I mentioned the newspaper example I will implement it.
 At first I implement the Newsstand. In the constructor I deal with the random event to simulate the newspaper arrival.
 
-  public class Newsstand()
-  {
-    public Newsstand()
+    public class Newsstand()
     {
-      Random r = new Random();
-      Thread.Sleep(r.Next(200,10000));
-      NotifySubscribers();
-    }
+      public Newsstand()
+      {
+        Random r = new Random();
+        Thread.Sleep(r.Next(200,10000));
+        NotifySubscribers();
+      }
   
-    public void Subscribe(Reader reader)
-    {
-      if(Subscribers.Contains(reader)) return;
+      public void Subscribe(Reader reader)
+      {
+        if(Subscribers.Contains(reader)) return;
       
-      Subscribers.Add(reader);
-    }
+        Subscribers.Add(reader);
+      }
     
-    public void Unsubscribe(Reader reader)
-    {
-      if(Subscribers.Contains(reader))
+      public void Unsubscribe(Reader reader)
       {
-        Subscribers.Remove(reader);
+        if(Subscribers.Contains(reader))
+        {
+          Subscribers.Remove(reader);
+        }
+      }
+    
+      private List<Reader> Subscribers = new List<Reader>();
+    
+      private void NotifySubscribers()
+      {
+        foreach(Reader reader in  Subscribers)
+        {
+          reader.Update(this);
+        }
       }
     }
-    
-    private List<Reader> Subscribers = new List<>(Reader);
-    
-    private void NotifySubscribers()
-    {
-      foreach(Reader reader in  Subscribers)
-      {
-        reader.Update(this);
-      }
-    }
-  }
 
 And now I implement the reader, that is you. You need an update method. That is all.
 
-  public class Reader()
-  {
-    Update(Newsstand stand)
+    public class Reader()
     {
-      Console.WriteLine("Go to the newsstand because the favourit newspaper has arrived!");
+      Update(Newsstand stand)
+      {
+        Console.WriteLine("Go to the newsstand because the favourit newspaper has arrived!");
+      }
     }
-  }
