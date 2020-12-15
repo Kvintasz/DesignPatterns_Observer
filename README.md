@@ -1,12 +1,12 @@
 # Observer pattern
-[Observer pattern](https://en.wikipedia.org/wiki/Observer_pattern) is one of the [Behavioral pattern](https://en.wikipedia.org/wiki/Behavioral_pattern). With this pattern we make updated one or more of our objects to be updated with state change of another object.
+[Observer pattern](https://en.wikipedia.org/wiki/Observer_pattern) is one of the [Behavioral pattern](https://en.wikipedia.org/wiki/Behavioral_pattern). With this pattern we make one or more of our objects updated with state change of another object.
 
 ## When should we use this pattern?
-Imagine that situation when you want to buy the latest edition of your favourit newspaper in the morning but you don't know when the newspaper arrives to the newsstand where you want to buy it.
+Imagine that situation when you want to buy the latest edition of your favourite newspaper in the morning but you don't know when the newspaper arrives to the newsstand where you want to buy it.
 There are three option:
 1. You go to the newstand and waiting for the newspaper. It is not appropiate because you are busy and you don't have infinit time for it.
 2. You visit the newsstand in every hour. This need lot of time and energy.
-3. You go to the newstand and **subscribe for the "Newspaper arrived" event**. You go home and do your work until you got a notification from the newsstand about the newspaper arrived. You go to the newsstand and buy your favourit newspaper
+3. You just **subscribe for the "Newspaper arrived" event**. You can do your work/fun until you got a notification from the newsstand about the newspaper arrived. You go to the newsstand and buy your favourit newspaper.
 
 When you want to implement the third solution you can use **Observer pattern**.
 
