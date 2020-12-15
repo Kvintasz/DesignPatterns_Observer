@@ -12,7 +12,7 @@ When you want to implement the third solution you can use **Observer pattern**.
 
 ## What do you need to implement this pattern?
 * Observable (subject, publisher) - e.g. newsstand
-  1. A collection for the subscribers (e.g. List<Reader> Subscribers)
+  1. A collection for the subscribers (e.g. List`<Reader>` Subscribers)
   2. A public method by which the observers/subscribers can subscribe for the event (public void Subscribe(Observer observer))
   3. A public method by which the observers can unsubscribe from the event (public void Unsubscribe(Observer observer))
   4. A private method for the observable to notify the subscribers about the state change (private void NotifySubscribers())
