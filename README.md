@@ -20,7 +20,7 @@ When you want to implement the third solution you can use **Observer pattern**.
   1. A public method by which the observable/publisher/subject updates the observer about the state change (public void Update(Observable observable)). This call is in the Notify method of the observable.
 
 ## Example implementation
-If mentioned the newspaper example I will implement it.
+If I mentioned the newspaper example I will implement it.
 At first I implement the Newsstand. In the constructor I deal with the random event to simulate the newspaper arrival.
 
   public class Newsstand()
