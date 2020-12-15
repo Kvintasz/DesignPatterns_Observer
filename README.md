@@ -65,5 +65,6 @@ And now I implement the reader, that is you. You need an update method. That is 
       Update(Newsstand stand)
       {
         Console.WriteLine("Go to the newsstand because the favourit newspaper has arrived!");
+        //Or you can do anything else when you get this notification. It is up to you or the requirement
       }
     }
