@@ -15,7 +15,7 @@ namespace MonitoringMetroStations
             //Get the tube list
             string currentPath = Directory.GetParent(typeof(Program).Assembly.Location).FullName;
             string pathOfTubes = currentPath + @"\Sources\tube.csv";
-            List<Tube> tubes = FileHandler.Instance.GetTubes(pathOfTubes);
+            List<Tube> tubes = FileHandler.GetInstance.GetTubes(pathOfTubes);
 
             //Get the targets of the drones
             Dictionary<int, Queue<Target>> dronesTargets = new Dictionary<int, Queue<Target>>();
@@ -26,7 +26,7 @@ namespace MonitoringMetroStations
             };
             foreach (string path in pathsOfDronesTargets)
             {
-                KeyValuePair<int, Queue<Target>> kvp = FileHandler.Instance.GetDroneTargets(path);
+                KeyValuePair<int, Queue<Target>> kvp = FileHandler.GetInstance.GetDroneTargets(path);
                 dronesTargets.TryAdd(kvp.Key, kvp.Value);
             }
 
@@ -64,7 +64,7 @@ namespace MonitoringMetroStations
 
             //Set the shutdown time
             DateTime shutDownTime = DateTime.Parse("22/03/2011 08:00");
-            int estimatedRunningTime = 7000;//(int)(shutDownTime - earliestDate).TotalMilliseconds;
+            int estimatedRunningTime = (int)(shutDownTime - earliestDate).TotalMilliseconds;
             dispatcher.SetRuntime(estimatedRunningTime);
 
             Console.WriteLine(GetWelcomeMessage(estimatedRunningTime));

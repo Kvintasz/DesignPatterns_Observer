@@ -1,4 +1,5 @@
 ﻿using MonitoringMetroStations.Entities;
+using MonitoringMetroStations.Helpers;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -112,7 +113,7 @@ namespace MonitoringMetroStations
                     this.previousTarget = target;
                     movingTask.Wait();
 
-                    Console.WriteLine(reportMessage);
+                    FileHandler.GetInstance.Print(reportMessage);
                 }
             }
         }
@@ -140,7 +141,7 @@ namespace MonitoringMetroStations
             string message = $"{id} drone reports: " +
                 $"\n\tApproaching the " +
                 $"\'lat:{coordinate.Latitude} lon:{coordinate.Longitude}\' position.";
-            Console.WriteLine(message);
+            FileHandler.GetInstance.Print(message);
             Task.Delay((int)this.delay).Wait();
         }
 
