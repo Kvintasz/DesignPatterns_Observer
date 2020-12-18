@@ -3,17 +3,25 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MonitoringMetroStations.Helpers
 {
     public class FileHandler
     {
-        public static FileHandler GetInstance { get; } = new FileHandler();
+        public static FileHandler GetInstance 
+        { 
+            get
+            {
+                return instance;
+            }
+        }
 
         private FileHandler()
         {
-
+            currentPath = Directory.GetParent(typeof(Program).Assembly.Location).FullName;
+            folderPathToWriteReports = currentPath + @"..\..\..\..\..\Logs";
         }
 
         internal List<Tube> GetTubes(string pathOfTubes)
@@ -75,54 +83,77 @@ namespace MonitoringMetroStations.Helpers
             }
         }
 
-        internal void Print(string messageIn)
+        /// <summary>
+        /// This method add the given string to the queue
+        /// If the printing task doesn't run it will start it otherwise doesn't do anything else.
+        /// </summary>
+        /// <param name="messageIn">The text that the caller wants to log to the log file</param>
+        public void Print(string messageIn)
         {
             messages.Enqueue(messageIn);
             lock (lockObject)
             {
                 if (isPrinting) return;
-                
+
                 isPrinting = true;
-                Task.Run(() => PrintMessage());
+                printingTask = Task.Run(() => PrintMessage());
             }
         }
 
-        private static string currentPath = Directory.GetParent(typeof(Program).Assembly.Location).FullName;
-        private static string folderPathToWriteReports = currentPath + @"..\..\..\..\..\Logs"; 
-        private static bool isPrinting = false;
-        private static object lockObject = new object();
-        private static ConcurrentQueue<string> messages = new ConcurrentQueue<string>();
+        private static readonly FileHandler instance = new FileHandler();
+        private string currentPath;
+        private string folderPathToWriteReports;
+        private bool isPrinting = false;
+        private object lockObject = new object();
+        private ConcurrentQueue<string> messages = new ConcurrentQueue<string>();
+        private Task printingTask;
+        private ReaderWriterLockSlim readWriteLock = new ReaderWriterLockSlim();
 
-        private static void PrintMessage()
+        /// <summary>
+        /// Writes the text from the queue
+        /// </summary>
+        private void PrintMessage()
         {
             while (messages.Count > 0)
             {
-                if (!File.Exists(folderPathToWriteReports))
-                {
-                    Directory.CreateDirectory(folderPathToWriteReports);
-                }
-
                 string filePath = folderPathToWriteReports + @"\log.txt";
-
-                string startMessage = "";
-                if (!File.Exists(filePath))
-                {
-                    // Create a file to write to.
-                    startMessage = "***********************************************" +
-                        $"\nThis is the log file where the drones reports are" +
-                        $"\n***********************************************\n" + Environment.NewLine;
-                    File.Create(filePath);
-                }
 
                 string message;
                 while (!messages.TryDequeue(out message)) ;
 
-                File.AppendAllText(filePath, (startMessage + message + Environment.NewLine));
+                WriteToFileThreadSafe(message + Environment.NewLine,
+                    filePath);
             }
 
             lock (lockObject)
             {
                 isPrinting = false;
+            }
+        }
+
+        /// <summary>
+        /// Writes the given text into the file which is at the given path.
+        /// Does it in a threadsafe way.
+        /// </summary>
+        /// <param name="text">The text that the caller wants to write into the file</param>
+        /// <param name="path">the path where the file is</param>
+        private void WriteToFileThreadSafe(string text, string path)
+        {
+            // Set Status to Locked
+            readWriteLock.EnterWriteLock();
+            try
+            {
+                // Append text to the file
+                using (StreamWriter sw = File.AppendText(path))
+                {
+                    sw.WriteLine(text);
+                    sw.Close();
+                }
+            }
+            finally
+            {
+                // Release lock
+                readWriteLock.ExitWriteLock();
             }
         }
     }
