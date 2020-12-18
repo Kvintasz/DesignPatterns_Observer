@@ -113,9 +113,18 @@ namespace MonitoringMetroStations
                     this.previousTarget = target;
                     movingTask.Wait();
 
-                    FileHandler.GetInstance.Print(reportMessage);
+                    MakeReport(reportMessage);
                 }
             }
+        }
+
+        private void MakeReport(string reportMessage)
+        {
+            //Write the report into file
+            FileHandler.GetInstance.Print(reportMessage);
+
+            //write the report to the console
+            Console.WriteLine(reportMessage);
         }
 
         private Target GetTargetFromQueue()
@@ -141,7 +150,7 @@ namespace MonitoringMetroStations
             string message = $"{id} drone reports: " +
                 $"\n\tApproaching the " +
                 $"\'lat:{coordinate.Latitude} lon:{coordinate.Longitude}\' position.";
-            FileHandler.GetInstance.Print(message);
+            MakeReport(message);
             Task.Delay((int)this.delay).Wait();
         }
 
